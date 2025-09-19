@@ -1,0 +1,23 @@
+name: Daily Job Posting
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 5:00 AM UTC = 8:00 AM EAT
+jobs:
+  post-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 lxml google-api-python-client google-auth-httplib2 google-auth-oauthlib
+      - name: Run script
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          TOKEN_PICKLE: ${{ secrets.TOKEN_PICKLE }}
+        run: |
+          # Decode token
+          echo "${{ secrets.TOKEN_PICKLE }}" | base64 -d > token.pickle
+          python job_automation.py
