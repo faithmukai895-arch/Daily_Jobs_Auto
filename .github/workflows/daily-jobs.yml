@@ -1,7 +1,10 @@
 name: Daily Job Posting
+
 on:
   schedule:
     - cron: '0 5 * * *'  # 5:00 AM UTC = 8:00 AM EAT
+  workflow_dispatch:  # Enables manual triggering
+
 jobs:
   post-jobs:
     runs-on: ubuntu-latest
